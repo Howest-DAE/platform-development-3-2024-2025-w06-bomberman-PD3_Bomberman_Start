@@ -6,30 +6,23 @@ namespace MapSystem.Model
 {
 	public class MapModel
 	{
-		public int Size { get; private set; }
 		public IEnumerable<HexPosition> AllPositions => _tiles.Keys;
 		public IEnumerable<CellModel> AllCells => _tiles.Values;
 
 		private Dictionary<HexPosition, CellModel> _tiles;
-		public MapModel(int size, Dictionary<HexPosition, CellType> customTiles, IEnumerable<HexPosition> allCoordinates)
+		public MapModel()
 		{
-			Size = size;
-
-			_tiles = new Dictionary<HexPosition, CellModel>(allCoordinates.Count());
-
-			foreach (var pos in allCoordinates)
-			{
-				CellType t = customTiles.ContainsKey(pos) ? customTiles[pos] : CellType.Grass;
-
-				CellModel model;
-
-				model = new CellModel(pos, t);
-				_tiles.Add(pos, model);
-			}
-
+			_tiles = new Dictionary<HexPosition, CellModel>();
 		}
 
-		public CellModel GetTile(HexPosition pos)
+		public CellModel AddCell(HexPosition pos, CellType type)
+		{
+			CellModel cellModel = new CellModel(pos, type);
+			_tiles.Add(pos, cellModel);
+			return cellModel;
+		}
+
+		public CellModel GetCellAtPosition(HexPosition pos)
 		{
 			return _tiles.GetValueOrDefault(pos);
 		}
